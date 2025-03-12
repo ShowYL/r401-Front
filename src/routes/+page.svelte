@@ -1,5 +1,48 @@
 <script>
 	let pageConnexion = $state(true);
+	let username = $state('');
+	let password = $state('');
+
+	function handleClick() {
+		if (pageConnexion) {
+			let data = JSON.stringify({
+				username: username,
+				password: password
+			});
+			fetch('http://localhost:3000/api/endpoint.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: data
+			})
+				.then((res) => res.json())
+				.then((res) => console.log(res))
+				.catch((err) => console.error(res));
+		} else {
+			let data = JSON.stringify({
+				username: username,
+				password: password
+			});
+			fetch('http://localhost:3000/api/endpoint.php', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: data
+			})
+				.then((res) => res.json())
+				.then((res) => console.log(res))
+				.then(() => {
+					username = ""
+					password = ""
+					pageConnexion = !pageConnexion
+				})
+				.catch((err) => console.error(res));
+		}
+	}
+
+
 </script>
 
 <section
@@ -15,6 +58,7 @@
 				<tr
 					><td
 						><input
+							bind:value={username}
 							class="rounded-lg"
 							type="text"
 							name="nomUtilisateur"
@@ -27,8 +71,9 @@
 				<tr
 					><td
 						><input
+							bind:value={password}
 							class="rounded-lg"
-							type="text"
+							type="password"
 							name="password"
 							id="password"
 							placeholder="Mot de passe"
@@ -39,7 +84,7 @@
 					><td
 						><button
 							class="t-[2%] mt-4 w-4 min-w-full cursor-pointer rounded-xl border p-1 hover:bg-gray-700 hover:text-white"
-							>{pageConnexion ? 'Connexion' : 'Inscription'}</button
+							onclick={() => handleClick()}>{pageConnexion ? 'Connexion' : 'Inscription'}</button
 						></td
 					></tr
 				><tr
