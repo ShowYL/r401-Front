@@ -3,13 +3,15 @@
 	let username = $state('');
 	let password = $state('');
 
+	const api_auth = "https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php"
+
 	function handleClick() {
 		if (pageConnexion) {
 			let data = JSON.stringify({
 				username: username,
 				password: password
 			});
-			fetch('http://localhost:3000/api/endpoint.php', {
+			fetch(api_auth, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -24,7 +26,7 @@
 				username: username,
 				password: password
 			});
-			fetch('http://localhost:3000/api/endpoint.php', {
+			fetch(api_auth, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
