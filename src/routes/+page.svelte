@@ -1,5 +1,5 @@
 <script>
-	import { postRequest, preRequest } from '$lib/utils';
+	import { postRequest } from '$lib/utils';
 
 	let pageConnexion = $state(true);
 	let username = $state('');
