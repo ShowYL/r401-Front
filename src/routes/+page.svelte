@@ -38,7 +38,6 @@
 				body: data
 			})
 				.then((res) => res.json())
-				.then((res) => console.log(res))
 				.then(() => {
 					password = ""
 					pageConnexion = !pageConnexion
