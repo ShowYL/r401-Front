@@ -4,24 +4,6 @@
 
     let { children } = $props();
 
-    onMount(() => {
-        const logoutButton = document.getElementById("logout-button");
-
-        const currentPage = window.location.pathname.split("/").pop();
-        const navButtons = document.querySelectorAll(".nav-button");
-
-        navButtons.forEach(button => {
-            const buttonHref = button.getAttribute("href").split("/").pop();
-            if (buttonHref === currentPage) {
-                button.onclick = (e) => e.preventDefault();
-                button.classList.add('disabled-hover');
-                const verticalHr = button.querySelector(".vertical-hr");
-                if (verticalHr) {
-                    verticalHr.style.display = 'block';
-                }
-            }
-        });
-    });
 </script>
 <div class="flex flex-row w-full h-screen"> <!-- container -->
     <div class='w-48 bg-gray-300 shadow-md flex'>  <!-- left bar -->
@@ -73,9 +55,3 @@
     </div>
 </div>
 
-<style>
-    .nav-button.disabled-hover:hover {
-        background-color: #403d39;
-        cursor: default;
-    }
-</style>
