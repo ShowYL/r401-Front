@@ -1,4 +1,6 @@
 <script>
+	import { postRequest, preRequest } from "$lib/utils";
+
 	let pageConnexion = $state(true);
 	let username = $state('');
 	let password = $state('');
@@ -6,7 +8,7 @@
 	const api_auth = "https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php"
 
 	function handleClick() {
-		if (pageConnexion) {
+		if (pageConnexion && username !== "" && password !== "") {
 			let data = JSON.stringify({
 				username: username,
 				password: password
@@ -19,9 +21,11 @@
 				body: data
 			})
 				.then((res) => res.json())
-				.then((res) => console.log(res))
-				.catch((err) => console.error(res));
-		} else {
+				.then((data) => {
+					postRequest(data.data)
+				})
+				.catch((err) => console.error(err));
+		} else if (username !== "" && password !== "") {
 			let data = JSON.stringify({
 				username: username,
 				password: password
@@ -36,7 +40,6 @@
 				.then((res) => res.json())
 				.then((res) => console.log(res))
 				.then(() => {
-					username = ""
 					password = ""
 					pageConnexion = !pageConnexion
 				})
@@ -60,6 +63,11 @@
 				<tr
 					><td
 						><input
+							onkeydown={(event) => {
+								if (event.key === "Enter"){
+									handleClick()
+								}
+							}}
 							bind:value={username}
 							class="rounded-lg"
 							type="text"
@@ -73,6 +81,11 @@
 				<tr
 					><td
 						><input
+							onkeydown={(event) => {
+								if (event.key === "Enter"){
+									handleClick()
+								}
+							}}
 							bind:value={password}
 							class="rounded-lg"
 							type="password"
@@ -85,6 +98,7 @@
 				><tr
 					><td
 						><button
+							type="button"
 							class="t-[2%] mt-4 w-4 min-w-full cursor-pointer rounded-xl border p-1 hover:bg-gray-700 hover:text-white"
 							onclick={() => handleClick()}>{pageConnexion ? 'Connexion' : 'Inscription'}</button
 						></td
@@ -93,6 +107,7 @@
 					><td
 						><p class="inline max-w-full font-thin whitespace-nowrap">
 							{pageConnexion ? "Vous n'avez pas de compte ? " : 'Vous avez un compte ? '}<button
+								type="button"
 								class="cursor-pointer text-blue-500 underline"
 								onclick={() => (pageConnexion = !pageConnexion)}
 								>{pageConnexion ? 'Créez - en un !' : 'Connectez-vous !'}</button
