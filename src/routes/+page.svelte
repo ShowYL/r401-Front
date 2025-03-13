@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { postRequest, preRequest } from '$lib/utils';
 
 	let pageConnexion = $state(true);
@@ -22,7 +23,10 @@
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					postRequest(data.data);
+					if (data.status_code === 200) { 
+                        postRequest(data.data);
+                        goto('/board/accueil');
+                    }
 				})
 				.catch((err) => console.error(err));
 		} else if (username !== '' && password !== '') {
