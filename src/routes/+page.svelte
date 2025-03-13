@@ -1,14 +1,14 @@
 <script>
-	import { postRequest, preRequest } from "$lib/utils";
+	import { postRequest, preRequest } from '$lib/utils';
 
 	let pageConnexion = $state(true);
 	let username = $state('');
 	let password = $state('');
 
-	const api_auth = "https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php"
+	const api_auth = 'https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php';
 
 	function handleClick() {
-		if (pageConnexion && username !== "" && password !== "") {
+		if (pageConnexion && username !== '' && password !== '') {
 			let data = JSON.stringify({
 				username: username,
 				password: password
@@ -22,10 +22,10 @@
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					postRequest(data.data)
+					postRequest(data.data);
 				})
 				.catch((err) => console.error(err));
-		} else if (username !== "" && password !== "") {
+		} else if (username !== '' && password !== '') {
 			let data = JSON.stringify({
 				username: username,
 				password: password
@@ -39,14 +39,12 @@
 			})
 				.then((res) => res.json())
 				.then(() => {
-					password = ""
-					pageConnexion = !pageConnexion
+					password = '';
+					pageConnexion = !pageConnexion;
 				})
 				.catch((err) => console.error(res));
 		}
 	}
-
-
 </script>
 
 <section
@@ -63,8 +61,8 @@
 					><td
 						><input
 							onkeydown={(event) => {
-								if (event.key === "Enter"){
-									handleClick()
+								if (event.key === 'Enter') {
+									handleClick();
 								}
 							}}
 							bind:value={username}
@@ -81,8 +79,8 @@
 					><td
 						><input
 							onkeydown={(event) => {
-								if (event.key === "Enter"){
-									handleClick()
+								if (event.key === 'Enter') {
+									handleClick();
 								}
 							}}
 							bind:value={password}
