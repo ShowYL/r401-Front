@@ -19,7 +19,7 @@ function setCookie(name, value = "", days) {
 }
 
 function getCookie(name) {
-    let nameEQ = String(name) + "=";
+    let nameEQ = name + "=";
     let ca = document.cookie.split(';');
     for(let i=0;i < ca.length;i++) {
         let c = ca[i];
