@@ -1,25 +1,93 @@
-<script> 
-    import Form from '$lib/components/Form.svelte';
+<script>
+	import Form from '$lib/components/Form.svelte';
+    import Table from '$lib/components/Table.svelte';
 
-    let fields = [
-        { label: "Licence", type: 'text', name: 'licence', required: true },
-        { label: 'Nom', type: 'text', name: 'nom', required: true },
-        { label: 'Prénom', type: 'text', name: 'prenom', required: false },
-        { label: 'Taille', type: 'number', name: 'taille', required: true},
-        { label: 'Poids', type: 'number', name: 'poids', required: true},
-        { label: 'Date de naissance', type: 'date', name: 'date_naissance', required: true },
-        { label: 'Statut', type: 'select', name: 'statut', required: true, options: [
-            { value: 'Actif', label: 'Actif' },
-            { value: 'Blessé', label: 'Blessé' },
-            { value: 'Absent', label: 'Absent' },
-            { value: 'Suspendu', label: 'Suspendu' }
-        ]},           
-        { label: 'Commentaire', type: 'textarea', name: 'commentaire', required: false }   
-    ];
+	let example = [
+		{
+			ID_Joueur: 1,
+			Licence: 'L001',
+			Nom: 'Dupont',
+			Prénom: 'Jean',
+			Taille: 180,
+			Poids: 75,
+			Date_Naissance: '1990-01-01',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 2,
+			Licence: 'L002',
+			Nom: 'Martin',
+			Prénom: 'Paulo',
+			Taille: 175,
+			Poids: 70,
+			Date_Naissance: '1992-02-02',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 3,
+			Licence: 'L003',
+			Nom: 'Durand',
+			Prénom: 'Pierre',
+			Taille: 185,
+			Poids: 80,
+			Date_Naissance: '1991-03-03',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 4,
+			Licence: 'L004',
+			Nom: 'Lefevre',
+			Prénom: 'Jacques',
+			Taille: 178,
+			Poids: 72,
+			Date_Naissance: '1993-04-04',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 5,
+			Licence: 'L005',
+			Nom: 'Moreau',
+			Prénom: 'Louis',
+			Taille: 182,
+			Poids: 78,
+			Date_Naissance: '1994-05-05',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 6,
+			Licence: 'L006',
+			Nom: 'Simon',
+			Prénom: 'Henri',
+			Taille: 177,
+			Poids: 74,
+			Date_Naissance: '1995-06-06',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 7,
+			Licence: 'L007',
+			Nom: 'Michel',
+			Prénom: 'Georges',
+			Taille: 183,
+			Poids: 76,
+			Date_Naissance: '1996-07-07',
+			Statut: 'Actif'
+		},
+		{
+			ID_Joueur: 56,
+			Licence: '123',
+			Nom: 'TOTO',
+			Prénom: 'Toto',
+			Taille: 12356,
+			Poids: 123564,
+			Date_Naissance: '2000-01-01',
+			Statut: 'Actif'
+		}
+	];
 
-    function handleSubmit(data) {
-        console.log(data);
-    }
+	function handleSubmit(data) {
+		console.log(data);
+	}
 </script>
 
-<Form {fields} onSubmit={handleSubmit} title="Ajouter un joueur"/>
+<Table data={example} />
