@@ -3,10 +3,7 @@
     import Table from '$lib/components/Table.svelte';
     import { preRequest } from '$lib/utils';
 
-
     const api_app = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php';
-    
-	
     
     function resquestdata() {
         const token = preRequest('token'); // Correctly get the token
@@ -106,13 +103,77 @@
 		}
 	];
 
+	let _type = '';
+	let fieldsType = 'Joueur';
 
-	function handleSubmit(data) {
+	function handleSubmit(data, type) {
 		console.log(data);
+		console.log(type);
+		_type = type;
+		console.log(_type);
+		switch (type) {
+			case 'Ajouter':
+				ajouter(data);
+				break;
+			case 'Modifier':
+				modifier(data);
+				break;
+			case 'Supprimer':
+				supprimer(data);
+				break;
+			default:
+				break;
+		}
 	}
+
+	function ajouter(data) {
+		fetch(api_app, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': preRequest('token'),
+			},
+			body: JSON.stringify(data),
+		})
+			.then((res) => res.json())
+			.then((data) => console.log(data))
+			.catch((err) => console.error(err));
+	}
+
+	function modifier(data) {
+		fetch(api_app, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': preRequest('token'),
+			},
+			body: JSON.stringify(data),
+		})
+			.then((res) => res.json())
+			.then((data) => console.log(data))
+			.catch((err) => console.error(err));
+	}
+
+	function supprimer(data) {
+		fetch(api_app, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': preRequest('token'),
+			},
+			body: JSON.stringify(data),
+		})
+			.then((res) => res.json())
+			.then((data) => console.log(data))
+			.catch((err) => console.error(err));
+	}
+
+
+
 </script>
 
 <Table data={example} />
-<Form fieldsType={'Joueur'} onSubmit={handleSubmit} title="Ajouter un joueur"/>
+<Form {fieldsType} onSubmit={(data, type='Ajouter') => handleSubmit(data, type)} title="{_type} un {fieldsType.toLowerCase()}"/>
+<Form {fieldsType} onSubmit={(data, type='Modifier') => handleSubmit(data, type)} title="{_type} un {fieldsType.toLowerCase()}"/>
 <button on:click={resquestdata}>Get data</button>
 

@@ -1,27 +1,26 @@
 <script>
-    export let title = '';
-    export let fieldsType = '';
-    export let onSubmit = () => {};
+    let { title = '', fieldsType = '', _type='', onSubmit = () => {} } = $props();
 
-    let fields = [];
-    let showModal = false;
+    let fields = $state([]);
+    let showModal = $state(false);
 
         switch (fieldsType) {
             case 'Joueur':
                 fields = [
+                    { label: "ID Joueur", type: 'number', name: 'ID_Joueur', required: false, hidden: true },
                     { label: "Licence", type: 'text', name: 'licence', required: true },
                     { label: 'Nom', type: 'text', name: 'nom', required: true },
-                    { label: 'Prénom', type: 'text', name: 'prenom', required: false },
-                    { label: 'Taille', type: 'number', name: 'taille', required: true},
-                    { label: 'Poids', type: 'number', name: 'poids', required: true},
+                    { label: 'Prénom', type: 'text', name: 'prenom', required: true },
+                    { label: 'Taille (cm)', type: 'number', name: 'taille', required: true },
+                    { label: 'Poids (kg)', type: 'number', name: 'poids', required: true },
                     { label: 'Date de naissance', type: 'date', name: 'date_naissance', required: true },
                     { label: 'Statut', type: 'select', name: 'statut', required: true, options: [
                         { value: 'Actif', label: 'Actif' },
                         { value: 'Blessé', label: 'Blessé' },
                         { value: 'Absent', label: 'Absent' },
                         { value: 'Suspendu', label: 'Suspendu' }
-                    ]},           
-                    { label: 'Commentaire', type: 'textarea', name: 'commentaire', required: false }   
+                    ]},
+                    { label: 'Commentaire', type: 'textarea', name: 'commentaire', required: false }
                 ];
                 break;
             case 'Match':
@@ -49,12 +48,12 @@
 
 <div class="modal" style="display: {showModal ? 'block' : 'none'};">
     <div class="modal-content">
-        <button type="button" class="close" on:click={() => showModal = false} aria-label="Close">&times;</button>
+        <button type="button" class="close" onclick={() => showModal = false} aria-label="Close">&times;</button>
         <h2>{title}</h2>
-        <form on:submit={handleSubmit}>
+        <form onsubmit={handleSubmit}>
                 {#each fields as field}
-                    <div class="form-group">
-                        <label for={field.name}>{field.label}</label>
+                    <div class="form-group" style="display: {field.hidden === true ? 'none' : 'block'};">
+                        <label for={field.name} style="display: {field.hidden === true ? 'none' : 'block'};">{field.label}</label>
                         {#if field.type === 'textarea'}
                             <textarea id={field.name} name={field.name} required={field.required}></textarea>
                         {:else if field.type === 'select'}
@@ -73,7 +72,7 @@
     </div>
 </div>
 
-<button on:click={() => showModal = true}>Open Form</button> 
+<button onclick={() => showModal = true}>{_type} un {fieldsType.toLowerCase()}</button> 
 
 <style>
     .modal {
