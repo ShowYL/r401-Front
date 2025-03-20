@@ -16,7 +16,7 @@
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': token,
             },
         })
             .then((res) => res.json())
