@@ -6,6 +6,7 @@
 
     const api_app = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php';
     
+	
     
     function resquestdata() {
         const token = preRequest('token'); // Correctly get the token
@@ -105,9 +106,13 @@
 		}
 	];
 
+
 	function handleSubmit(data) {
 		console.log(data);
 	}
 </script>
 
 <Table data={example} />
+<Form fieldsType={'Joueur'} onSubmit={handleSubmit} title="Ajouter un joueur"/>
+<button on:click={resquestdata}>Get data</button>
+
