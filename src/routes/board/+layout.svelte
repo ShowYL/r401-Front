@@ -1,9 +1,15 @@
 <script>
-    import '../../app.css';
-    import { onMount } from 'svelte';
+	import '../../app.css';
+	import { onMount } from 'svelte';
+	import { eraseCookie } from '$lib/utils';
+	import { goto } from '$app/navigation';
 
-    let { children } = $props();
+	let { children } = $props();
 
+	function deconnexion() {
+		eraseCookie('token');
+		goto("/");
+	}
 </script>
 <div class="flex flex-row w-full h-screen"> <!-- container -->
     <div class='w-56 bg-gray-300 shadow-md flex'>  <!-- left bar -->
@@ -41,8 +47,10 @@
                 </li>
             </ul>
             <div class="logout-div">
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_interactive_supports_focus -->
                 <a id="logout-button" class="logout-button flex items-center bg-[#555555] text-white p-4 rounded cursor-pointer no-underline h-3/4 my-2 mx-6 hover:bg-[#636262]"
-                data-sveltekit-reload>
+                data-sveltekit-reload onclick={() => deconnexion()}>
                 <img src="/logout.png" alt="Log-Out logo" class="w-5 h-5 mr-3">Log-Out
                 </a>
             </div>
@@ -59,4 +67,3 @@
         <!-- footer after -->
     </div>
 </div>
-
