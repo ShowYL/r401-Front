@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 
 	let { data = null, dataSelected = $bindable() } = $props();
-	$inspect(data)
 
 	let previousIndex = $state(null);
 
@@ -43,7 +42,7 @@
 			<thead>
 				<tr>
 					{#each headers as header}
-						<th class="cursor-pointer border p-2">
+						<th class="cursor-default bg-slate-300 border-2 p-2">
 							{header}
 						</th>
 					{/each}
@@ -54,7 +53,7 @@
 					<tr>
 						{#each row as donnee}
 							{#if isRowSelected(row, index)}
-								<td class="border bg-blue-500 p-2" onclick={() => select(row, index)}>{donnee}</td>
+								<td class="border bg-gray-400 p-2" onclick={() => select(row, index)}>{donnee}</td>
 							{:else}
 								<td class="border p-2" onclick={() => select(row, index)}>{donnee}</td>
 							{/if}

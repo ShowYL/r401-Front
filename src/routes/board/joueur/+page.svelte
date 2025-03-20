@@ -3,9 +3,10 @@
     import Table from '$lib/components/Table.svelte';
     import { preRequest } from '$lib/utils';
 	import { onMount } from 'svelte';
+    import { API_APP_BASE } from '$lib/utils'
 
 
-    const api_app = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php';
+    const api_app = API_APP_BASE+'endpointJoueur.php';
     
 	let data = $state(null)
     let dataSelected = $state(null)
