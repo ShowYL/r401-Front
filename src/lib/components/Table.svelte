@@ -1,9 +1,12 @@
 <script>
+	import { onMount } from 'svelte';
+
 	let { data = null, dataSelected = $bindable() } = $props();
+	$inspect(data)
 
 	let previousIndex = $state(null);
 
-	const headers = data && data.length > 0 ? Object.keys(data[0]) : [];
+	let headers = $derived(data && data.length > 0 ? Object.keys(data[0]) : [])
 
 	const body = () => {
 		if (!data || data.length === 0) return [];
@@ -16,7 +19,6 @@
 		return res;
 	};
 
-	body()
 
 	function isRowSelected(row, index) {
 		if (!dataSelected) return false;
