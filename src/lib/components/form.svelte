@@ -1,7 +1,7 @@
 <script>
     let { fieldsType, title, selectedData = null} = $props();
 
-    import { preRequest } from '$lib/utils';
+    import { preRequest, API_APP_BASE } from '$lib/utils';
 
     let fields = $state([]);
     let showModal = $state(false);
