@@ -16,7 +16,6 @@
 		return res;
 	};
 
-	body()
 
 	function isRowSelected(row, index) {
 		if (!dataSelected) return false;

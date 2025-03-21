@@ -1,78 +1,131 @@
 <script>
-    let { title = '', fieldsType = '', _type='', onSubmit = () => {} } = $props();
+    let { fieldsType, title, selectedData = null} = $props();
+
+    import { preRequest } from '$lib/utils';
 
     let fields = $state([]);
     let showModal = $state(false);
+    let apiEndpoint = '';
+    let actionType = $state('');
 
-        switch (fieldsType) {
-            case 'Joueur':
-                fields = [
-                    { label: "ID Joueur", type: 'number', name: 'ID_Joueur', required: false, hidden: true },
-                    { label: "Licence", type: 'text', name: 'licence', required: true },
-                    { label: 'Nom', type: 'text', name: 'nom', required: true },
-                    { label: 'Prénom', type: 'text', name: 'prenom', required: true },
-                    { label: 'Taille (cm)', type: 'number', name: 'taille', required: true },
-                    { label: 'Poids (kg)', type: 'number', name: 'poids', required: true },
-                    { label: 'Date de naissance', type: 'date', name: 'date_naissance', required: true },
-                    { label: 'Statut', type: 'select', name: 'statut', required: true, options: [
-                        { value: 'Actif', label: 'Actif' },
-                        { value: 'Blessé', label: 'Blessé' },
-                        { value: 'Absent', label: 'Absent' },
-                        { value: 'Suspendu', label: 'Suspendu' }
-                    ]},
-                    { label: 'Commentaire', type: 'textarea', name: 'commentaire', required: false }
-                ];
-                break;
-            case 'Match':
-                fields = [
-                ];
-                break;
-            case 'Selection':
-                fields = [
-                ];
-                break;
-            default:
-                fields = [];
-        }
+    const api_app = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php'; 
 
+    switch (fieldsType) {
+        case 'Joueur':
+            fields = [
+                { label: "ID Joueur", type: 'number', name: 'ID_Joueur', required: false, hidden: true },
+                { label: "Licence", type: 'text', name: 'licence', required: true },
+                { label: 'Nom', type: 'text', name: 'nom', required: true },
+                { label: 'Prénom', type: 'text', name: 'prenom', required: true },
+                { label: 'Taille (cm)', type: 'number', name: 'taille', required: true },
+                { label: 'Poids (kg)', type: 'number', name: 'poids', required: true },
+                { label: 'Date de naissance', type: 'date', name: 'date_naissance', required: true },
+                { label: 'Statut', type: 'select', name: 'statut', required: true, options: [
+                    { value: 'Actif', label: 'Actif' },
+                    { value: 'Blessé', label: 'Blessé' },
+                    { value: 'Absent', label: 'Absent' },
+                    { value: 'Suspendu', label: 'Suspendu' }
+                ]},
+                { label: 'Commentaire', type: 'textarea', name: 'commentaire', required: false }
+            ];
+            apiEndpoint = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php';
+            title = title || 'Gérer un joueur';
+            break;
+        case 'Match':
+            fields = [];
+            break;
+        case 'Selection':
+            fields = [];
+            break;
+        default:
+            fields = [];
+    }
+
+    // Pré-remplir les champs si des données sont sélectionnées
+    // svelte-ignore state_referenced_locally
+        if (selectedData && actionType === 'Modifier') {
+        // svelte-ignore state_referenced_locally
+        fields.forEach((field) => {
+            if (selectedData[field.name] !== undefined) {
+                field.value = selectedData[field.name];
+            }
+        });
+    }
 
     function handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData);
-        onSubmit(data);
-        showModal = false;
-    }
-</script>
 
+        console.log(`Action: ${actionType}`);
+        console.log(data);
+
+        let method = '';
+        switch (actionType) {
+            case 'Ajouter':
+                method = 'POST';
+                break;
+            case 'Modifier':
+                method = 'PUT';
+                break;
+            case 'Supprimer':
+                method = 'DELETE';
+                break;
+            default:
+                return;
+        }
+
+        fetch(apiEndpoint, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': preRequest('token'),
+            },
+            body: JSON.stringify(data),
+        })
+            .then((res) => res.json())
+            .then((response) => {
+                console.log(response);
+                showModal = false;
+            })
+            .catch((err) => console.error(err));
+    }
+
+</script>
 
 <div class="modal" style="display: {showModal ? 'block' : 'none'};">
     <div class="modal-content">
         <button type="button" class="close" onclick={() => showModal = false} aria-label="Close">&times;</button>
         <h2>{title}</h2>
         <form onsubmit={handleSubmit}>
-                {#each fields as field}
-                    <div class="form-group" style="display: {field.hidden === true ? 'none' : 'block'};">
-                        <label for={field.name} style="display: {field.hidden === true ? 'none' : 'block'};">{field.label}</label>
-                        {#if field.type === 'textarea'}
-                            <textarea id={field.name} name={field.name} required={field.required}></textarea>
-                        {:else if field.type === 'select'}
-                            <select id={field.name} name={field.name} required={field.required}>
-                                {#each field.options as option}
-                                    <option value={option.value}>{option.label}</option>
-                                {/each}
-                            </select>
-                        {:else}
-                            <input type={field.type} id={field.name} name={field.name} required={field.required} />
-                        {/if}
-                    </div>
-                {/each}
-                <button type="submit">Submit</button>
-            </form>
+            {#each fields as field}
+                <div class="form-group" style="display: {field.hidden === true ? 'none' : 'block'};">
+                    <label for={field.name} style="display: {field.hidden === true ? 'none' : 'block'};">{field.label}</label>
+                    {#if field.type === 'textarea'}
+                        <textarea id={field.name} name={field.name} required={field.required}></textarea>
+                    {:else if field.type === 'select'}
+                        <select id={field.name} name={field.name} required={field.required}>
+                            {#each field.options as option}
+                                <option value={option.value}>{option.label}</option>
+                            {/each}
+                        </select>
+                    {:else}
+                        <input type={field.type} id={field.name} name={field.name} required={field.required} />
+                    {/if}
+                </div>
+            {/each}
+            <button type="submit">{actionType}</button>
+        </form>
     </div>
 </div>
 
-<button onclick={() => showModal = true}>{_type} un {fieldsType.toLowerCase()}</button> 
+<div class="actions">
+    <button onclick={() => { actionType = 'Ajouter'; showModal = true; }}>Ajouter un {fieldsType.toLowerCase()}</button>
+    <button onclick={() => { actionType = 'Modifier'; showModal = true; }}>Modifier un {fieldsType.toLowerCase()}</button>
+    <button onclick={() => { actionType = 'Supprimer'; showModal = true; }}>Supprimer un {fieldsType.toLowerCase()}</button>
+</div>
+
+
 
 <style>
     .modal {
