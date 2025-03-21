@@ -8,7 +8,6 @@
     let apiEndpoint = '';
     let actionType = $state('');
 
-    const api_app = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php'; 
 
     switch (fieldsType) {
         case 'Joueur':
@@ -28,7 +27,7 @@
                 ]},
                 { label: 'Commentaire', type: 'textarea', name: 'commentaire', required: false }
             ];
-            apiEndpoint = 'https://lestitansdesete.alwaysdata.net/R401/r401-App/api/endpointJoueur.php';
+            apiEndpoint = API_APP_BASE+'endpointJoueur.php';
             title = title || 'Gérer un joueur';
             break;
         case 'Match':
