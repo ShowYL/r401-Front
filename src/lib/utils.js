@@ -32,3 +32,6 @@ function getCookie(name) {
 export function eraseCookie(name) {   
     document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
+
+export const API_AUTH = "https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php"
+export const API_APP_BASE = "https://lestitansdesete.alwaysdata.net/R401/r401-App/api/"

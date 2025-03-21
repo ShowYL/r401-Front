@@ -1,12 +1,11 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { postRequest } from '$lib/utils';
+	import { API_AUTH } from '$lib/utils';
 
 	let pageConnexion = $state(true);
 	let username = $state('');
 	let password = $state('');
-
-	const api_auth = 'https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php';
 
 	function handleClick() {
 		if (pageConnexion && username !== '' && password !== '') {
@@ -14,7 +13,7 @@
 				username: username,
 				password: password
 			});
-			fetch(api_auth, {
+			fetch(API_AUTH, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -34,7 +33,7 @@
 				username: username,
 				password: password
 			});
-			fetch(api_auth, {
+			fetch(API_AUTH, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
