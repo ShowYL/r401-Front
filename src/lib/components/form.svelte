@@ -42,13 +42,20 @@
 
     // Pré-remplir les champs si des données sont sélectionnées
     // svelte-ignore state_referenced_locally
-        if (selectedData && actionType === 'Modifier') {
+    if (selectedData && actionType === 'Modifier') {
         // svelte-ignore state_referenced_locally
         fields.forEach((field) => {
             if (selectedData[field.name] !== undefined) {
                 field.value = selectedData[field.name];
             }
         });
+    }
+    
+    // svelte-ignore state_referenced_locally
+    if (selectedData && actionType === 'Supprimer') {
+        // svelte-ignore state_referenced_locally
+        let _id = fields.find((field) => field.name === 'ID_Joueur'); // trouver le champ ID
+        let id = _id.value; // récupérer la valeur de l'ID
     }
 
     function handleSubmit(event) {
