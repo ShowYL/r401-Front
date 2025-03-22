@@ -14,6 +14,7 @@
     function resquestdata() {
         const token = preRequest('token'); // Correctly get the token
         console.log(token)
+        console.log(api_app)
         fetch(api_app, {
             method: 'GET',
             headers: {
@@ -22,7 +23,7 @@
             },
         })
             .then((res) => res.json())
-            .then((donnee) => data = donnee)
+            .then((donnee) => data = donnee.data)
             .catch((err) => console.error(err));
     }
 
@@ -34,6 +35,6 @@
 
 </script>
 
+<Form fieldsType="Joueur" selectedData={dataSelected} />
 <Table data={data} bind:dataSelected={dataSelected}/>
-<Form fieldsType="Joueur" selectedData={dataSelected ? dataSelected[0] : null} />
 <button onclick={resquestdata}>Get data</button>
