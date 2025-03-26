@@ -21,7 +21,7 @@
             },
         })
             .then((res) => res.json())
-            .then((donnee) => data = donnee)
+            .then((donnee) => data = donnee.data)
             .catch((err) => console.error(err));
     }
 
