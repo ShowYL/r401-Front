@@ -133,25 +133,34 @@
                         alert('Veuillez sélectionner une ligne à modifier');
                     }
                     break;
-            case 'Supprimer':
-                if (selectedData) {
-                    const firstRow = selectedData[0];
-                    if (firstRow) {
-                        fields.forEach((field) => {
-                            // Affiche uniquement l'ID, le nom et le prénom
-                            if (['Id_Joueur','licence','nom', 'prenom'].includes(field.name)) {
-                                field.value = firstRow[fields.findIndex(f => f.name === field.name)];
-                                field.readonly = true; // Rendre les champs non modifiables
-                            } else {
-                                field.hidden = true; // Cache les autres champs
+                    case 'Supprimer':
+                        if (selectedData) {
+                            const firstRow = selectedData[0];
+                            if (firstRow) {
+                                fields.forEach((field) => {
+                                    // Affiche uniquement l'ID, le nom et le prénom
+                                    if (['Id_Joueur','licence','nom', 'prenom'].includes(field.name)) {
+                                        if (Array.isArray(firstRow)) {
+                                            // Pour les tableaux
+                                            const fieldIndex = fields.findIndex(f => f.name === field.name);
+                                            field.value = firstRow[fieldIndex];
+                                        } else {
+                                            // Pour les objets
+                                            if (firstRow[field.name] !== undefined) {
+                                                field.value = firstRow[field.name];
+                                            }
+                                        }
+                                        field.readonly = true; // Rendre les champs non modifiables
+                                    } else {
+                                        field.hidden = true; // Cache les autres champs
+                                    }
+                                });
                             }
-                        });
-                    }
-                    showModal = true;
-                } else {
-                    alert('Veuillez sélectionner une ligne à supprimer');
-                }
-                break;
+                            showModal = true;
+                        } else {
+                            alert('Veuillez sélectionner une ligne à supprimer');
+                        }
+                        break;
             default:
                 break;
         }
