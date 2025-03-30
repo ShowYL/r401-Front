@@ -1,7 +1,7 @@
 <script>
 	import Table from '$lib/components/Table.svelte';
 	import { fly } from 'svelte/transition';
-	import Form from './form.svelte';
+	import Form from './Form.svelte';
 
 
 	let { match, selection, joueurs } = $props();
@@ -38,19 +38,19 @@
 				return {
 					ID_Selection: playerObj[0].ID_Selection,
 					ID_Match: playerObj[0].ID_Match,
-					ID_Joueur: playerObj[0].ID_Joueur,
+					Id_Joueur: playerObj[0].ID_Joueur,
 					Poste: playerObj[0].Poste,
-					Titulaire: playerObj[0].Titulaire
+					Titulaire: playerObj[0].Titulaire,
 				};
 			});
 		} else {
 			dataForForm = null;
 		}
+		console.log($inspect(dataForForm));
 	});
 </script>
 
 {#if selectionDisplay}
-
 	<details
 		transition:fly={{ duration: 1000 }}
 		class="group m-4 ml-6 origin-top cursor-default rounded border-2 border-gray-400 p-1"

@@ -2,6 +2,7 @@
     let { fieldsType, title, selectedData = null} = $props();
 
     import { preRequest, API_APP_BASE } from '$lib/utils';
+	import { all } from 'axios';
 
     let fields = $state([]);
     let showModal = $state(false);
@@ -52,23 +53,44 @@
             title = title || 'Gérer un Match';
             break;
         case 'Selection':
-            fields = [
-                {label : "ID Selection", type: 'number', name: 'Id_Selection', required: false, hidden: true},
-                {label : "ID Joueur", type: 'select', name: 'ID_Joueur', required: true},
-                {label : "ID Match", type: 'text', name: 'ID_Match', required: true},
-                {label : "Titulaire", type: 'select', name: 'Titulaire', required: true, options: [
-                    { value: '1', label: 'Oui' },
-                    { value: '0', label: 'Non' }
-                ]},
-                {label : "Poste", type: 'select', name: 'Poste', required: true, options: [
-                    { value: 'Gardien', label: 'Gardien' },
-                    { value: 'Défenseur', label: 'Défenseur' },
-                    { value: 'Milieu', label: 'Milieu' },
-                    { value: 'Attaquant', label: 'Attaquant' }
-                ]},
-                {label : "Note", type: 'textarea', name: 'Note', required: false}
-
-            ];
+            let allJoueurs = [];
+            fetch(API_APP_BASE+'endpointJoueur.php', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': preRequest('token'),
+                },
+            })
+                .then((res) => res.json())
+                .then((donnee) => { 
+                    allJoueurs = donnee.data.map(joueur => ({
+                        value: joueur.ID_Joueur,
+                        label: `${joueur.Nom} ${joueur.Prénom}`
+                    }));
+                    fields = fields.map(field => 
+                        field.name === 'Id_Joueur' ? { ...field, options: allJoueurs } : field
+                    );
+                    console.log(allJoueurs);
+                });
+                fields = [
+                    {label : "ID Selection", type: 'number', name: 'Id_Selection', required: false, hidden: true},
+                    {label : "ID Joueur", type: 'select', name: 'Id_Joueur', required: true, options: allJoueurs},
+                    {label : "ID Match", type: 'text', name: 'ID_Match', required: true},
+                    {label : "Titulaire", type: 'select', name: 'Titulaire', required: true, options: [
+                        { value: '1', label: 'Oui' },
+                        { value: '0', label: 'Non' }
+                    ]},
+                    {label : "Poste", type: 'select', name: 'Poste', required: true, options: [
+                        { value: 'Pilier Gauche', label: 'Pilier Gauche' },
+                        { value: 'Pilier Droit', label: 'Pilier Droit' },
+                        { value: 'Talon', label: 'Talon' },
+                        { value: 'Demi de mêlée', label: 'Demi de mêlée' },
+                        { value: 'Centre', label: 'Centre' },
+                        { value: 'Ailier Gauche', label: 'Ailier Gauche' },
+                        { value: 'Ailier Droit', label: 'Ailier Droit' },
+                    ]},
+                    {label : "Note", type: 'textarea', name: 'Note', required: false}
+                ];
             apiEndpoint = API_APP_BASE+'endpointSelection.php';
             title = title || 'Gérer une Sélection';
             break;
@@ -88,20 +110,29 @@
                 });
                 showModal = true;
                 break;
-            case 'Modifier':
-                if (selectedData) {
-                    const firstRow = selectedData[0];
-                    if (firstRow) {
-                        fields.forEach((field, index) => {
-                            field.value = firstRow[index];
-                            field.readonly = false; // Rendre les champs modifiables
-                        });
+                case 'Modifier':
+                    if (selectedData) {
+                        const firstRow = selectedData[0];
+                        if (firstRow) {
+                            fields.forEach((field, index) => {
+                                // Vérifier si firstRow est un tableau (ancien format) ou un objet (format de Details.svelte)
+                                if (Array.isArray(firstRow)) {
+                                    // Comportement original pour un tableau (utilisé dans joueur/+page.svelte et match/+page.svelte)
+                                    field.value = firstRow[index];
+                                } else {
+                                    // Nouveau comportement pour un objet (utilisé dans Details.svelte)
+                                    if (firstRow[field.name] !== undefined) {
+                                        field.value = firstRow[field.name];
+                                    }
+                                }
+                                field.readonly = false; // Rendre les champs modifiables
+                            });
+                        }
+                        showModal = true;
+                    } else {
+                        alert('Veuillez sélectionner une ligne à modifier');
                     }
-                    showModal = true;
-                } else {
-                    alert('Veuillez sélectionner une ligne à modifier');
-                }
-                break;
+                    break;
             case 'Supprimer':
                 if (selectedData) {
                     const firstRow = selectedData[0];
