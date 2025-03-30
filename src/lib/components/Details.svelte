@@ -48,9 +48,9 @@
 		}
 	});
 </script>
-<Form fieldsType="Selection" selectedData={dataForForm} />
 
 {#if selectionDisplay}
+
 	<details
 		transition:fly={{ duration: 1000 }}
 		class="group m-4 ml-6 origin-top cursor-default rounded border-2 border-gray-400 p-1"
@@ -63,6 +63,7 @@
 			match du {match.Date_Match} contre {match.Equipe_Adverse}
 		</summary>
 		<div transition:fly={{ y: -5, duration: 200 }}>
+			<Form fieldsType="Selection" selectedData={dataForForm} />
 			<Table data={selectionDisplay} bind:dataSelected />
 		</div>
 	</details>

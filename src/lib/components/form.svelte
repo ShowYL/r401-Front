@@ -229,9 +229,9 @@
 </div>
 
 <div class="actions">
-    <button class="action-btn add" onclick={() => { actionType = 'Ajouter'; works() }}>Ajouter un {fieldsType}</button>
-    <button class="action-btn edit" onclick={() => { actionType = 'Modifier'; works() }}>Modifier un {fieldsType}</button>
-    <button class="action-btn delete" onclick={() => { actionType = 'Supprimer'; works(); }}>Supprimer un {fieldsType}</button>
+    <button class="action-btn add" onclick={() => { actionType = 'Ajouter'; works() }}>Ajouter {fieldsType}</button>
+    <button class="action-btn edit" onclick={() => { actionType = 'Modifier'; works() }}>Modifier {fieldsType}</button>
+    <button class="action-btn delete" onclick={() => { actionType = 'Supprimer'; works(); }}>Supprimer {fieldsType}</button>
 </div>
 
 <style>
