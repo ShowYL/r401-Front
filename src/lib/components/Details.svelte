@@ -3,6 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import Form from './form.svelte';
 
+
 	let { match, selection, joueurs } = $props();
 
 	let dataSelected = $state(null);
@@ -47,8 +48,8 @@
 		}
 	});
 </script>
-
 <Form fieldsType="Selection" selectedData={dataForForm} />
+
 {#if selectionDisplay}
 	<details
 		transition:fly={{ duration: 1000 }}
