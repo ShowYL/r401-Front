@@ -106,7 +106,7 @@
 	}
 </script>
 
-<div class="m-4">
+<div class="">
 	{#each dataDetails as selection}
 		<Details match={selection.match} selection={selection.selection} joueurs={selection.joueurs} />
 	{/each}

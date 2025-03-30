@@ -48,9 +48,20 @@
 </script>
 
 {#if selectionDisplay}
-	<details transition:fly={{ duration:1000 }} class="cursor-default">
-		<summary>match du {match.Date_Match} contre {match.Equipe_Adverse}</summary>
-		<Table data={selectionDisplay} bind:dataSelected />
+	<details
+		transition:fly={{ duration: 1000 }}
+		class="group m-4 ml-6 origin-top cursor-default rounded border-2 border-gray-400 p-1"
+	>
+		<summary class="relative cursor-default list-none">
+			<span
+				class="absolute -left-5 transform transition-transform duration-200 ease-in-out
+			           group-open:rotate-45">+</span
+			>
+			match du {match.Date_Match} contre {match.Equipe_Adverse}
+		</summary>
+		<div transition:fly={{ y: -5, duration: 200 }}>
+			<Table data={selectionDisplay} bind:dataSelected />
+		</div>
 	</details>
 {:else}
 	<div>
