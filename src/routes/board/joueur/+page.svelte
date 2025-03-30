@@ -37,4 +37,3 @@
 
 <Form fieldsType="Joueur" selectedData={dataSelected} />
 <Table data={data} bind:dataSelected={dataSelected}/>
-<button onclick={resquestdata}>Get data</button>
