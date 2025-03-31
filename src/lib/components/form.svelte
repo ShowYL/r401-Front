@@ -132,25 +132,54 @@
                         alert('Veuillez sélectionner une ligne à modifier');
                     }
                     break;
-            case 'Supprimer':
-                if (selectedData) {
-                    const firstRow = selectedData[0];
-                    if (firstRow) {
-                        fields.forEach((field) => {
-                            // Affiche uniquement l'ID, le nom et le prénom
-                            if (['Id_Joueur','licence','nom', 'prenom'].includes(field.name)) {
-                                field.value = firstRow[fields.findIndex(f => f.name === field.name)];
-                                field.readonly = true; // Rendre les champs non modifiables
-                            } else {
-                                field.hidden = true; // Cache les autres champs
+                    case 'Supprimer':
+                        if (selectedData) {
+                            const firstRow = selectedData[0];
+                            if (firstRow) {
+                                fields.forEach((field) => {
+                                    // Affiche uniquement les champs pertinents pour chaque type
+                                    if (fieldsType === 'Joueur' && ['Id_Joueur', 'licence', 'nom', 'prenom'].includes(field.name)) {
+                                        if (Array.isArray(firstRow)) {
+                                            // Pour les tableaux
+                                            const fieldIndex = fields.findIndex(f => f.name === field.name);
+                                            field.value = firstRow[fieldIndex];
+                                        } else {
+                                            // Pour les objets
+                                            if (firstRow[field.name] !== undefined) {
+                                                field.value = firstRow[field.name];
+                                            }
+                                        }
+                                        field.readonly = true; // Rendre les champs non modifiables
+                                    } else if (fieldsType === 'Match' && ['Id_Match', 'Date_Match', 'Equipe_Adverse'].includes(field.name)) {
+                                        if (Array.isArray(firstRow)) {
+                                            const fieldIndex = fields.findIndex(f => f.name === field.name);
+                                            field.value = firstRow[fieldIndex];
+                                        } else {
+                                            if (firstRow[field.name] !== undefined) {
+                                                field.value = firstRow[field.name];
+                                            }
+                                        }
+                                        field.readonly = true;
+                                    } else if (fieldsType === 'Selection' && ['Id_Selection', 'Id_Joueur', 'ID_Match'].includes(field.name)) {
+                                        if (Array.isArray(firstRow)) {
+                                            const fieldIndex = fields.findIndex(f => f.name === field.name);
+                                            field.value = firstRow[fieldIndex];
+                                        } else {
+                                            if (firstRow[field.name] !== undefined) {
+                                                field.value = firstRow[field.name];
+                                            }
+                                        }
+                                        field.readonly = true;
+                                    } else {
+                                        field.hidden = true; // Cache les autres champs
+                                    }
+                                });
                             }
-                        });
-                    }
-                    showModal = true;
-                } else {
-                    alert('Veuillez sélectionner une ligne à supprimer');
-                }
-                break;
+                            showModal = true;
+                        } else {
+                            alert('Veuillez sélectionner une ligne à supprimer');
+                        }
+                        break;
             default:
                 break;
         }
@@ -205,7 +234,14 @@
         if (selectedData) {
             const firstRow = selectedData[0]; // Récupère la première ligne sélectionnée
             if (firstRow) {
-                const dataToDelete = { Id_Joueur: firstRow[0] }; // Supposons que l'ID est à l'index 0
+                let dataToDelete = {};
+                if (Array.isArray(firstRow)) {
+                    // Si firstRow est un tableau, on suppose que l'ID est à l'index 0
+                    dataToDelete = { [fields[0].name]: firstRow[0] };
+                } else {
+                    // Si firstRow est un objet, on utilise le nom du champ correspondant
+                    dataToDelete = { [fields[0].name]: firstRow[fields[0].name] };
+                }
                 fetch(apiEndpoint, {
                     method: 'DELETE',
                     headers: {
