@@ -1,5 +1,5 @@
 <script>
-    let { fieldsType, title, selectedData = null} = $props();
+    let { fieldsType, title, selectedData = null, resquestdata = null} = $props();
 
     import { preRequest, API_APP_BASE } from '$lib/utils';
 	import { all } from 'axios';
@@ -8,11 +8,10 @@
     let showModal = $state(false);
     let apiEndpoint = '';
     let actionType = $state('');
-
     let modalBool = $state(true);
 
 
-    switch (fieldsType) {
+    switch (fieldsType) { 
         case 'Joueur':
             fields = [
                 { label: "ID Joueur", type: 'number', name: 'Id_Joueur', required: false, hidden: true },
@@ -111,7 +110,7 @@
                 showModal = true;
                 break;
                 case 'Modifier':
-                    if (selectedData) {
+                    if (selectedData && selectedData.length === 1) {
                         const firstRow = selectedData[0];
                         if (firstRow) {
                             fields.forEach((field, index) => {
@@ -134,7 +133,8 @@
                     }
                     break;
                     case 'Supprimer':
-                        if (selectedData) {
+                        if (selectedData && selectedData.length === 1) {
+                            // Si une seule ligne est sélectionnée, pré-remplir les champs avec les données de cette ligne
                             const firstRow = selectedData[0];
                             if (firstRow) {
                                 fields.forEach((field) => {
@@ -227,6 +227,7 @@
 
                 console.log(response);
                 showModal = false;
+                resquestdata();
             })
             .catch((err) => console.error(err));
     }
@@ -254,8 +255,9 @@
                     .then((res) => res.json())
                     .then((response) => {
                         console.log('Suppression réussie:', response);
-                        alert('Donnée supprimée avec succès');
                         showModal = false;
+                        alert('Donnée supprimée avec succès');
+                        resquestdata();
                     })
                     .catch((err) => console.error('Erreur lors de la suppression:', err));
             }
@@ -265,147 +267,40 @@
 
 </script>
 
-<div class="modal" style="display: {showModal ? 'block' : 'none'};">
-    <div class="modal-content">
-        <button type="button" class="close" onclick={() => showModal = false} aria-label="Close">&times;</button>
-        <h2>{title}</h2>
-        <form onsubmit={handleSubmit}>
-            {#each fields as field}
-                <div class="form-group" style="display: {field.hidden === true ? 'none' : 'block'};">
-                    <label for={field.name} style="display: {field.hidden === true ? 'none' : 'block'};">{field.label}</label>
-                    {#if field.type === 'textarea'}
-                        <textarea id={field.name} name={field.name} required={field.required} readonly={field.readonly}>{field.value || ''}</textarea>
-                    {:else if field.type === 'select'}
-                        <select id={field.name} name={field.name} required={field.required} disabled={field.readonly}>
-                            {#each field.options as option}
-                                <option value={option.value} selected={option.value === field.value}>{option.label}</option>
-                            {/each}
-                        </select>
-                    {:else}
-                        <input type={field.type} id={field.name} name={field.name} required={field.required} value={field.value || ''} readonly={field.readonly} />
-                    {/if}
-                </div>
-            {/each}
-            {#if actionType === 'Supprimer'}
-                <button type="button" onclick={deleteDirectly} class="action-btn delete">Confirmer la suppression</button>
-            {:else}
-                <button type="submit">{actionType}</button>
-            {/if}   
-        </form>
+<div class="fixed z-10 inset-0 overflow-y-auto" style="display: {showModal ? 'block' : 'none'};">
+    <div class="flex items-center justify-center min-h-screen bg-opacity-20">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
+            <button type="button" class="text-gray-500 hover:text-gray-900 float-right text-2xl font-bold" onclick={() => showModal = false} aria-label="Close">&times;</button>
+            <h2 class="text-xl font-bold mb-4">{title}</h2>
+            <form onsubmit={handleSubmit}>
+                {#each fields as field}
+                    <div class="mb-4" style="display: {field.hidden === true ? 'none' : 'block'};">
+                        <label for={field.name} class="block text-sm font-medium text-gray-700 mb-1" style="display: {field.hidden === true ? 'none' : 'block'};">{field.label}</label>
+                        {#if field.type === 'textarea'}
+                            <textarea id={field.name} name={field.name} required={field.required} readonly={field.readonly} class="w-full p-2 border border-gray-300 rounded-md">{field.value || ''}</textarea>
+                        {:else if field.type === 'select'}
+                            <select id={field.name} name={field.name} required={field.required} disabled={field.readonly} class="w-full p-2 border border-gray-300 rounded-md">
+                                {#each field.options as option}
+                                    <option value={option.value} selected={option.value === field.value}>{option.label}</option>
+                                {/each}
+                            </select>
+                        {:else}
+                            <input type={field.type} id={field.name} name={field.name} required={field.required} value={field.value || ''} readonly={field.readonly} class="w-full p-2 border border-gray-300 rounded-md" />
+                        {/if}
+                    </div>
+                {/each}
+                {#if actionType === 'Supprimer'}
+                    <button type="button" onclick={deleteDirectly} class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Confirmer la suppression</button>
+                {:else}
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">{actionType}</button>
+                {/if}   
+            </form>
+        </div>
     </div>
 </div>
 
-<div class="actions">
-    <button class="action-btn add" onclick={() => { actionType = 'Ajouter'; works() }}>Ajouter {fieldsType}</button>
-    <button class="action-btn edit" onclick={() => { actionType = 'Modifier'; works() }}>Modifier {fieldsType}</button>
-    <button class="action-btn delete" onclick={() => { actionType = 'Supprimer'; works(); }}>Supprimer {fieldsType}</button>
+<div class="flex gap-4 mt-5">
+    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" onclick={() => { actionType = 'Ajouter'; works() }}>Ajouter {fieldsType}</button>
+    <button class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" onclick={() => { actionType = 'Modifier'; works() }}>Modifier {fieldsType}</button>
+    <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" onclick={() => { actionType = 'Supprimer'; works(); }}>Supprimer {fieldsType}</button>
 </div>
-
-<style>
-    .actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-
-    .action-btn {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: bold;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .action-btn.add {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .action-btn.add:hover {
-        background-color: #45a049;
-    }
-
-    .action-btn.edit {
-        background-color: #FFC107;
-        color: white;
-    }
-
-    .action-btn.edit:hover {
-        background-color: #e0a800;
-    }
-
-    .action-btn.delete {
-        background-color: #F44336;
-        color: white;
-    }
-
-    .action-btn.delete:hover {
-        background-color: #d32f2f;
-    }
-
-    .modal {
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-    .modal-content {
-        background-color: #fff;
-        margin: 5% auto;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 60%;
-        max-width: 600px;
-    }
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-    .form-group textarea {
-        resize: none;
-        height: 120px;
-    }
-    button[type="submit"] {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    button[type="submit"]:hover {
-        background-color: #45a049;
-    }
-</style>

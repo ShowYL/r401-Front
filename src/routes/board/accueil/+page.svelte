@@ -24,7 +24,7 @@
             }
         })
             .then((res) => res.json())
-            .then((donnee) => (data = donnee))
+            .then((donnee) => (data = donnee.data))
             .catch((err) => console.error(err));
     }
 
@@ -38,8 +38,7 @@
             }
         })
             .then((res) => res.json())
-            .then((donnee) => (data = donnee))
-            .then(() => console.log($state.snapshot(data)))
+            .then((donnee) => (data = donnee.data))
             .catch((err) => console.error(err));
     }
 
@@ -82,7 +81,7 @@
                         .then(statData => {
                             // Renvoyer à la fois les stats et l'index du joueur
                             return {
-                                stats: statData,
+                                stats: statData.data,
                                 joueurIndex: index
                             };
                         });

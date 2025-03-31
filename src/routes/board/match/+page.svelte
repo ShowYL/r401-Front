@@ -35,5 +35,5 @@
 
 </script>
 
-<Form fieldsType="Match" selectedData={dataSelected} />
+<Form fieldsType="Match" selectedData={dataSelected} {resquestdata} />
 <Table data={data} bind:dataSelected={dataSelected}/>

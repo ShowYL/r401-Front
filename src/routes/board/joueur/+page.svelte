@@ -32,8 +32,7 @@
 	})
 
 
-
 </script>
 
-<Form fieldsType="Joueur" selectedData={dataSelected} />
+<Form fieldsType="Joueur" selectedData={dataSelected} {resquestdata}/>
 <Table data={data} bind:dataSelected={dataSelected}/>

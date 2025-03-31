@@ -11,66 +11,24 @@
     let lostPercentage = data ? ((lost / total) * 100).toFixed(2) : "0.00";
 </script>
 
-<div class="stats-container">
-    <h2 class="card-title">Statistique du club</h2>
-    <div class="cards-container">
-        <div class="card">
-            <h3>Total de matchs</h3>
-            <p>{total}</p>
+<div class="p-4 bg-gray-100 rounded-lg shadow-md">
+    <h2 class="text-xl mb-4 text-center">Statistique du club</h2>
+    <div class="flex flex-wrap gap-4 justify-center">
+        <div class="bg-white border border-gray-300 rounded-lg p-4 w-48 text-center shadow-sm">
+            <h3 class="text-lg mb-2">Total de matchs</h3>
+            <p class="text-base text-gray-700">{total}</p>
         </div>
-        <div class="card">
-            <h3>Matchs gagnés</h3>
-            <p>{won } ({wonPercentage}%)</p>
+        <div class="bg-white border border-gray-300 rounded-lg p-4 w-48 text-center shadow-sm">
+            <h3 class="text-lg mb-2">Matchs gagnés</h3>
+            <p class="text-base text-gray-700">{won} ({wonPercentage}%)</p>
         </div>
-        <div class="card">
-            <h3>Matchs nuls</h3>
-            <p>{draw} ({drawPercentage}%)</p>
+        <div class="bg-white border border-gray-300 rounded-lg p-4 w-48 text-center shadow-sm">
+            <h3 class="text-lg mb-2">Matchs nuls</h3>
+            <p class="text-base text-gray-700">{draw} ({drawPercentage}%)</p>
         </div>
-        <div class="card">
-            <h3>Matchs perdus</h3>
-            <p>{lost} ({lostPercentage}%)</p>
+        <div class="bg-white border border-gray-300 rounded-lg p-4 w-48 text-center shadow-sm">
+            <h3 class="text-lg mb-2">Matchs perdus</h3>
+            <p class="text-base text-gray-700">{lost} ({lostPercentage}%)</p>
         </div>
     </div>
 </div>
-
-<style>
-    .stats-container {
-        padding: 1rem;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-title {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-    }
-
-    .cards-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        justify-content: center;
-    }
-
-    .card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 1rem;
-        width: 200px;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .card h3 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .card p {
-        font-size: 1rem;
-        color: #555;
-    }
-</style>
