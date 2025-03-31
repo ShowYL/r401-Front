@@ -32,32 +32,27 @@
 		}
 	}
 
-	async function requestDataMatch(listIDMatch) {
+	async function requestAllMatches() {
 		const token = preRequest('token');
-
-		await Promise.all(
-			listIDMatch.map(async (element) => {
-				try {
-					const res = await fetch(api_app_match + `?Id_Match=${element}`, {
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: token
-						}
-					});
-					const data = await res.json();
-					dataMatch = [...dataMatch, ...[data.data]];
-				} catch (err) {
-					console.error(err);
+		try {
+			const res = await fetch(api_app_match, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: token
 				}
-			})
-		);
+			});
+			const data = await res.json();
+			dataMatch = data.data;
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
-	async function requestDataJoueur(listIDMatch) {
+	async function requestDataJoueur(listIDJoueur) {
 		const token = preRequest('token');
 
 		await Promise.all(
-			listIDMatch.map(async (element) => {
+			listIDJoueur.map(async (element) => {
 				try {
 					const res = await fetch(api_app_joueur + `?Id_Joueur=${element}`, {
 						headers: {
@@ -75,9 +70,9 @@
 	}
 
 	onMount(async () => {
+		await requestAllMatches();
 		const selection = await resquestDataSelection();
 		if (selection && selection.length > 0) {
-			await requestDataMatch([...new Set(selection.map((item) => item.ID_Match))]);
 			await requestDataJoueur([...new Set(selection.map((item) => item.ID_Joueur))]);
 		}
 		format();
@@ -86,21 +81,21 @@
 	function format() {
 		for (let index = 0; index < dataMatch.length; index++) {
 			let joueurMatchID = [];
-            let selectionJoueur = [];
+			let selectionJoueur = [];
 
-			for (let selec of dataSelection) {
+			for (let selec of dataSelection || []) {
 				if (selec.ID_Match === dataMatch[index].ID_Match) {
 					joueurMatchID.push(selec.ID_Joueur);
-                    selectionJoueur.push(selec)
+					selectionJoueur.push(selec);
 				}
 			}
 
-            let joueurMatchData = [...dataJoueur.filter((e) => joueurMatchID.includes(e.ID_Joueur))]
+			let joueurMatchData = [...dataJoueur.filter((e) => joueurMatchID.includes(e.ID_Joueur))];
 
 			dataDetails[index] = {
 				match: dataMatch[index],
 				joueurs: joueurMatchData,
-                selection: selectionJoueur
+				selection: selectionJoueur
 			};
 		}
 	}
