@@ -2,7 +2,6 @@
     let { fieldsType, title, selectedData = null, resquestdata = null} = $props();
 
     import { preRequest, API_APP_BASE } from '$lib/utils';
-	import { all } from 'axios';
 
     let fields = $state([]);
     let showModal = $state(false);
