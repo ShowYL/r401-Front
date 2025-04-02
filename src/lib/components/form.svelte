@@ -68,7 +68,6 @@
                     fields = fields.map(field => 
                         field.name === 'Id_Joueur' ? { ...field, options: allJoueurs } : field
                     );
-                    console.log(allJoueurs);
                 });
                 fields = [
                     {label : "ID Selection", type: 'number', name: 'Id_Selection', required: false, hidden: true},

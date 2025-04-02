@@ -55,10 +55,7 @@
             }
         })
         .then((res) => res.json())
-        .then((response) => {
-            // Débug de la réponse
-            console.log("Réponse joueurs:", response);
-            
+        .then((response) => {            
             // Vérifier si la réponse contient une propriété data
             const joueurs = response.data || response;
             
@@ -89,7 +86,6 @@
                 );
             } else {
                 console.error("Format de réponse inattendu:", joueurs);
-                throw new Error('Invalid response for joueurs');
             }
         })
         .then((statResults) => {
@@ -112,7 +108,6 @@
             });
             
             alldata = formattedData;
-            console.log("Stats récupérées:", $state.snapshot(alldata));
         })
         .catch((err) => console.error(err));
     }
