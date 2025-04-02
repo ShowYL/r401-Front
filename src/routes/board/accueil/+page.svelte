@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     import { API_APP_BASE } from '$lib/utils';
     import { preRequest } from '$lib/utils';
-    import Form from '$lib/components/Form.svelte';
     import Table from '$lib/components/Table.svelte';
     import Card from '$lib/components/Card.svelte';
 
