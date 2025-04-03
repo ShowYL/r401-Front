@@ -13,8 +13,6 @@
     
     function resquestdata() {
         const token = preRequest('token'); // Correctly get the token
-        console.log(token)
-        console.log(api_app)
         fetch(api_app, {
             method: 'GET',
             headers: {

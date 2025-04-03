@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     import { API_APP_BASE } from '$lib/utils';
     import { preRequest } from '$lib/utils';
-    import Form from '$lib/components/Form.svelte';
     import Table from '$lib/components/Table.svelte';
     import Card from '$lib/components/Card.svelte';
 
@@ -55,10 +54,7 @@
             }
         })
         .then((res) => res.json())
-        .then((response) => {
-            // Débug de la réponse
-            console.log("Réponse joueurs:", response);
-            
+        .then((response) => {            
             // Vérifier si la réponse contient une propriété data
             const joueurs = response.data || response;
             
@@ -89,7 +85,6 @@
                 );
             } else {
                 console.error("Format de réponse inattendu:", joueurs);
-                throw new Error('Invalid response for joueurs');
             }
         })
         .then((statResults) => {
@@ -112,7 +107,6 @@
             });
             
             alldata = formattedData;
-            console.log("Stats récupérées:", $state.snapshot(alldata));
         })
         .catch((err) => console.error(err));
     }

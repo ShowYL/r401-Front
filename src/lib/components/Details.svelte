@@ -46,7 +46,6 @@
 		} else {
 			dataForForm = null;
 		}
-		console.log($inspect(dataForForm));
 	});
 </script>
 
